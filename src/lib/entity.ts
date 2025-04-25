@@ -32,7 +32,7 @@ export function e_set(i: number, active: boolean) {
 }
 
 export function e_new(t: Type, x: number, y: number) {
-  const i = e_next();
+  const i = next();
   e_set(i, true);
   e_type[i] = t;
   e_x[i] = x;
@@ -63,7 +63,7 @@ export function e_isFlag(i: number, flag: Flag) {
   return (e_flags[i] & flag) !== 0;
 }
 
-function e_next() {
+function next() {
   for (let i = 0; i < MAX_ENTITIES; i++) {
     if (!e_isFlag(i, Flag.IS_ACTIVE)) {
       return i;

@@ -19,7 +19,10 @@ export function cam_update(targetX: number, targetY: number) {
   const vx = dx * 0.1 * delta;
   const vy = dy * 0.1 * delta;
   const v = distance(0, 0, vx, vy);
-  if (v < d) {
+  if (v > d) {
+    x += (vx / v) * d;
+    y += (vy / v) * d;
+  } else {
     x += vx;
     y += vy;
   }
