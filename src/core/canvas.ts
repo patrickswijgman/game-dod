@@ -1,35 +1,35 @@
 import { font } from "@/core/font.ts";
 import { texture } from "@/core/texture.ts";
 
-export const ASPECT_RATIO = window.screen.width / window.screen.height;
-export const WIDTH = 320;
-export const HEIGHT = WIDTH / ASPECT_RATIO;
-export const SCALE = window.screen.width / WIDTH;
+const ASPECT_RATIO = window.screen.width / window.screen.height;
+const WIDTH = 320;
+const HEIGHT = WIDTH / ASPECT_RATIO;
+const SCALE = window.screen.height / HEIGHT;
 
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d")!;
 
-export function xf_reset() {
+export function resetTransform() {
   ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0);
 }
 
-export function xf_translate(x: number, y: number) {
+export function translateTransform(x: number, y: number) {
   ctx.translate(x, y);
 }
 
-export function xf_scale(x: number, y = x) {
+export function scaleTransform(x: number, y = x) {
   ctx.scale(x, y);
 }
 
-export function g_clear() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+export function clearBackground(color: string) {
+  drawRect(0, 0, WIDTH, HEIGHT, color);
 }
 
-export function g_sprite(x: number, y: number, w: number, h: number, px = 0, py = 0) {
+export function drawSprite(x: number, y: number, w: number, h: number, px = 0, py = 0) {
   ctx.drawImage(texture, x, y, w, h, -px, -py, w, h);
 }
 
-export function g_text(s: string, x: number, y: number, color = "white", align: CanvasTextAlign = "left", baseline: CanvasTextBaseline = "top") {
+export function drawText(s: string, x: number, y: number, color = "white", align: CanvasTextAlign = "left", baseline: CanvasTextBaseline = "top") {
   ctx.font = font;
   ctx.textAlign = align;
   ctx.textBaseline = baseline;
@@ -37,7 +37,7 @@ export function g_text(s: string, x: number, y: number, color = "white", align: 
   ctx.fillText(s, x, y);
 }
 
-export function g_rect(x: number, y: number, w: number, h: number, color = "white", filled = true) {
+export function drawRect(x: number, y: number, w: number, h: number, color = "white", filled = true) {
   if (filled) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
@@ -47,11 +47,11 @@ export function g_rect(x: number, y: number, w: number, h: number, color = "whit
   }
 }
 
-export function g_width() {
+export function getWidth() {
   return canvas.width / SCALE;
 }
 
-export function g_height() {
+export function getHeight() {
   return canvas.height / SCALE;
 }
 

@@ -1,37 +1,37 @@
-import { g_sprite } from "@/core/canvas.ts";
+import { drawSprite } from "@/core/canvas.ts";
 import { isDownHeld, isLeftHeld, isRightHeld, isUpHeld } from "@/core/input.ts";
-import { Flag, e_new, e_setFlag, Type, e_velX, e_velY, e_translate } from "@/lib/entity.ts";
+import { Flag, newEntity, setFlag, Type, velX, velY, setEntityTransform } from "@/lib/entity.ts";
 import { addEntity } from "@/lib/game.ts";
-import { v_normalize, v_reset, v_scale } from "@/core/vector.ts";
+import { normalizeVector, resetVector, scaleVector } from "@/core/vector.ts";
 
-export function e_newPlayer(x: number, y: number) {
-  const i = e_new(Type.PLAYER, x, y);
-  e_setFlag(i, Flag.IS_PLAYER, true);
+export function newPlayer(x: number, y: number) {
+  const i = newEntity(Type.PLAYER, x, y);
+  setFlag(i, Flag.IS_PLAYER, true);
   addEntity(i);
   return i;
 }
 
-export function e_updatePlayer(i: number) {
-  v_reset(i, e_velX, e_velY);
+export function updatePlayer(i: number) {
+  resetVector(i, velX, velY);
 
   if (isUpHeld) {
-    e_velY[i] -= 1;
+    velY[i] -= 1;
   }
   if (isDownHeld) {
-    e_velY[i] += 1;
+    velY[i] += 1;
   }
   if (isLeftHeld) {
-    e_velX[i] -= 1;
-    e_setFlag(i, Flag.IS_FLIPPED, true);
+    velX[i] -= 1;
+    setFlag(i, Flag.IS_FLIPPED, true);
   }
   if (isRightHeld) {
-    e_velX[i] += 1;
-    e_setFlag(i, Flag.IS_FLIPPED, false);
+    velX[i] += 1;
+    setFlag(i, Flag.IS_FLIPPED, false);
   }
 
-  v_normalize(i, e_velX, e_velY);
-  v_scale(i, e_velX, e_velY, 0.75);
+  normalizeVector(i, velX, velY);
+  scaleVector(i, velX, velY, 0.75);
 
-  e_translate(i, true);
-  g_sprite(0, 16, 16, 16, 8, 15);
+  setEntityTransform(i, true);
+  drawSprite(0, 16, 16, 16, 8, 15);
 }

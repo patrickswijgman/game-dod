@@ -1,5 +1,5 @@
-import { cam_translate } from "@/core/camera.ts";
-import { xf_reset, xf_scale, xf_translate } from "@/core/canvas.ts";
+import { addCameraTransform } from "@/core/camera.ts";
+import { resetTransform, scaleTransform, translateTransform } from "@/core/canvas.ts";
 
 export const enum Type {
   NONE,
@@ -14,58 +14,50 @@ export const enum Flag {
 
 const MAX_ENTITIES = 2048;
 
-export const e_type = new Uint8Array(MAX_ENTITIES);
-export const e_x = new Float32Array(MAX_ENTITIES);
-export const e_y = new Float32Array(MAX_ENTITIES);
-export const e_velX = new Float32Array(MAX_ENTITIES);
-export const e_velY = new Float32Array(MAX_ENTITIES);
-export const e_flags = new Uint32Array(MAX_ENTITIES);
+export const type = new Uint8Array(MAX_ENTITIES);
+export const posX = new Float32Array(MAX_ENTITIES);
+export const posY = new Float32Array(MAX_ENTITIES);
+export const velX = new Float32Array(MAX_ENTITIES);
+export const velY = new Float32Array(MAX_ENTITIES);
+export const flags = new Uint32Array(MAX_ENTITIES);
 
-export function e_set(i: number, active: boolean) {
-  e_type[i] = 0;
-  e_x[i] = 0;
-  e_y[i] = 0;
-  e_velX[i] = 0;
-  e_velY[i] = 0;
-  e_flags[i] = 0;
-  e_setFlag(i, Flag.IS_ACTIVE, active);
-}
-
-export function e_new(t: Type, x: number, y: number) {
-  const i = next();
-  e_set(i, true);
-  e_type[i] = t;
-  e_x[i] = x;
-  e_y[i] = y;
+export function newEntity(t: Type, x: number, y: number) {
+  const i = nextEntity();
+  type[i] = t;
+  posX[i] = x;
+  posY[i] = y;
+  velX[i] = 0;
+  velY[i] = 0;
+  flags[i] = Flag.IS_ACTIVE;
   return i;
 }
 
-export function e_translate(i: number, cam: boolean) {
-  xf_reset();
+export function setEntityTransform(i: number, cam: boolean) {
+  resetTransform();
   if (cam) {
-    cam_translate();
+    addCameraTransform();
   }
-  xf_translate(e_x[i], e_y[i]);
-  if (e_isFlag(i, Flag.IS_FLIPPED)) {
-    xf_scale(-1, 1);
+  translateTransform(posX[i], posY[i]);
+  if (isFlag(i, Flag.IS_FLIPPED)) {
+    scaleTransform(-1, 1);
   }
 }
 
-export function e_setFlag(i: number, flag: Flag, enabled: boolean) {
+export function setFlag(i: number, flag: Flag, enabled: boolean) {
   if (enabled) {
-    e_flags[i] |= flag;
+    flags[i] |= flag;
   } else {
-    e_flags[i] &= ~flag;
+    flags[i] &= ~flag;
   }
 }
 
-export function e_isFlag(i: number, flag: Flag) {
-  return (e_flags[i] & flag) !== 0;
+export function isFlag(i: number, flag: Flag) {
+  return (flags[i] & flag) !== 0;
 }
 
-function next() {
+function nextEntity() {
   for (let i = 0; i < MAX_ENTITIES; i++) {
-    if (!e_isFlag(i, Flag.IS_ACTIVE)) {
+    if (!isFlag(i, Flag.IS_ACTIVE)) {
       return i;
     }
   }
