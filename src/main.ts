@@ -23,9 +23,7 @@ async function setup() {
 function update() {
   resetTransform();
   clearBackground();
-
   updateInputs();
-
   sortEntities(sortEntitiesOnDepth);
 
   for (const i of getEntities()) {
