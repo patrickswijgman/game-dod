@@ -1,3 +1,4 @@
+import { MAX_ENTITIES } from "@/consts.ts";
 import { addCameraTransform } from "@/core/camera.ts";
 import { resetTransform, scaleTransform, translateTransform } from "@/core/canvas.ts";
 
@@ -12,32 +13,93 @@ export const enum Flag {
   IS_FLIPPED = 1 << 2,
 }
 
-const MAX_ENTITIES = 2048;
+export const enum State {
+  NONE,
+}
+
+export const enum Anim {
+  NONE,
+  BREATH,
+  WALK,
+}
 
 export const type = new Uint8Array(MAX_ENTITIES);
+
 export const posX = new Float32Array(MAX_ENTITIES);
 export const posY = new Float32Array(MAX_ENTITIES);
 export const velX = new Float32Array(MAX_ENTITIES);
 export const velY = new Float32Array(MAX_ENTITIES);
+
+export const state = new Uint8Array(MAX_ENTITIES);
+export const stateNext = new Uint8Array(MAX_ENTITIES);
+export const stateTime = new Uint32Array(MAX_ENTITIES);
+
+export const anim = new Uint8Array(MAX_ENTITIES);
+export const animX = new Float32Array(MAX_ENTITIES);
+export const animY = new Float32Array(MAX_ENTITIES);
+export const animScaleX = new Float32Array(MAX_ENTITIES);
+export const animScaleY = new Float32Array(MAX_ENTITIES);
+export const animTime = new Uint32Array(MAX_ENTITIES);
+
 export const flags = new Uint32Array(MAX_ENTITIES);
 
 export function newEntity(t: Type, x: number, y: number) {
   const i = nextEntity();
+
   type[i] = t;
+
   posX[i] = x;
   posY[i] = y;
   velX[i] = 0;
   velY[i] = 0;
+
+  state[i] = State.NONE;
+  stateNext[i] = State.NONE;
+  stateTime[i] = 0;
+
+  anim[i] = Anim.NONE;
+  animX[i] = 0;
+  animY[i] = 0;
+  animScaleX[i] = 1;
+  animScaleY[i] = 1;
+  animTime[i] = 0;
+
   flags[i] = Flag.IS_ACTIVE;
+
   return i;
 }
 
-export function setEntityTransform(i: number, cam: boolean) {
+export function setState(i: number, s: State) {
+  stateNext[i] = s;
+}
+
+export function transitionState(i: number) {
+  state[i] = stateNext[i];
+  stateTime[i] = 0;
+  setAnimation(i, Anim.NONE);
+}
+
+export function setAnimation(i: number, a: Anim) {
+  if (a !== anim[i]) {
+    anim[i] = a;
+    animX[i] = 0;
+    animY[i] = 0;
+    animScaleX[i] = 1;
+    animScaleY[i] = 1;
+    animTime[i] = 0;
+  }
+}
+
+export function setEntityTransform(i: number, inWorld: boolean) {
   resetTransform();
-  if (cam) {
+  if (inWorld) {
     addCameraTransform();
   }
   translateTransform(posX[i], posY[i]);
+  if (anim[i]) {
+    translateTransform(animX[i], animY[i]);
+    scaleTransform(animScaleX[i], animScaleY[i]);
+  }
   if (isFlag(i, Flag.IS_FLIPPED)) {
     scaleTransform(-1, 1);
   }
@@ -61,5 +123,6 @@ function nextEntity() {
       return i;
     }
   }
+
   throw new Error("Out of entities :(");
 }
