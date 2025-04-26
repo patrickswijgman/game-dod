@@ -4,6 +4,7 @@ import { Color } from "@/consts.ts";
 import { setCameraPosition, updateCamera } from "@/core/camera.ts";
 import { clearBackground, drawText, resetTransform, scaleTransform, translateTransform } from "@/core/canvas.ts";
 import { loadFont } from "@/core/font.ts";
+import { updateInputs } from "@/core/input.ts";
 import { delta, fps, start } from "@/core/loop.ts";
 import { loadTexture } from "@/core/texture.ts";
 import { addVector } from "@/core/vector.ts";
@@ -22,6 +23,8 @@ async function setup() {
 function update() {
   resetTransform();
   clearBackground();
+
+  updateInputs();
 
   sortEntities(sortEntitiesOnDepth);
 

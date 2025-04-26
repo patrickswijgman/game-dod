@@ -51,6 +51,10 @@ export function getHeight() {
   return canvas.height / SCALE;
 }
 
+export function getCanvas(): Readonly<HTMLCanvasElement> {
+  return canvas;
+}
+
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
