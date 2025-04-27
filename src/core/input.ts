@@ -1,39 +1,35 @@
-import { SCALE } from "@/consts.ts";
+import { Input, MAX_INPUTS, SCALE } from "@/consts.ts";
 import { getCameraX, getCameraY } from "@/core/camera.ts";
 import { getCanvas } from "@/core/canvas.ts";
 
-export const enum Input {
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
-  LMB,
-  RMB,
-  MAX,
-}
+type Binding = string | number;
 
-const enum Pointer {
-  X,
-  Y,
-  WORLD_X,
-  WORLD_Y,
-  MAX,
-}
+const inputsDown = new Uint8Array(MAX_INPUTS);
+const inputsPressed = new Uint8Array(MAX_INPUTS);
+const inputsReleased = new Uint8Array(MAX_INPUTS);
+const bindings = new Array<Binding>(MAX_INPUTS);
 
-const inputsDown = new Uint8Array(Input.MAX);
-const inputsPressed = new Uint8Array(Input.MAX);
-const pointer = new Float32Array(Pointer.MAX);
+let pointerX = 0;
+let pointerY = 0;
+let pointerWorldX = 0;
+let pointerWorldY = 0;
 
 const canvas = getCanvas();
 
-export function setInput(i: Input, state: number) {
-  inputsDown[i] = state;
-  inputsPressed[i] = state;
+export function setInput(i: Input, state: boolean) {
+  inputsDown[i] = state ? 1 : 0;
+  inputsPressed[i] = state ? 1 : 0;
+  inputsReleased[i] = state ? 0 : 1;
+}
+
+export function setBinding(i: Input, b: string) {
+  bindings[i] = b;
 }
 
 export function updateInputs() {
   updatePointerWorldPosition();
   inputsPressed.fill(0);
+  inputsReleased.fill(0);
 }
 
 export function isInputDown(i: Input) {
@@ -44,61 +40,70 @@ export function isInputPressed(i: Input) {
   return inputsPressed[i] === 1;
 }
 
+export function isInputReleased(i: Input) {
+  return inputsReleased[i] === 1;
+}
+
+export function getPointerX() {
+  return pointerX;
+}
+
+export function getPointerY() {
+  return pointerY;
+}
+
+export function getPointerWorldX() {
+  return pointerWorldX;
+}
+
+export function getPointerWorldY() {
+  return pointerWorldY;
+}
+
 function updatePointerPosition(x: number, y: number) {
-  pointer[Pointer.X] = x / SCALE;
-  pointer[Pointer.Y] = y / SCALE;
+  pointerX = x / SCALE;
+  pointerY = y / SCALE;
   updatePointerWorldPosition();
 }
 
 function updatePointerWorldPosition() {
-  pointer[Pointer.WORLD_X] = pointer[Pointer.X] + getCameraX();
-  pointer[Pointer.WORLD_Y] = pointer[Pointer.Y] + getCameraY();
+  pointerWorldX = pointerX + getCameraX();
+  pointerWorldY = pointerY + getCameraY();
 }
 
-function onKeyEvent(code: string, state: number) {
-  switch (code) {
-    case "KeyW":
-      setInput(Input.UP, state);
-      break;
-    case "KeyS":
-      setInput(Input.DOWN, state);
-      break;
-    case "KeyA":
-      setInput(Input.LEFT, state);
-      break;
-    case "KeyD":
-      setInput(Input.RIGHT, state);
-      break;
+function onKeyEvent(code: string, state: boolean) {
+  for (let i = 0; i < bindings.length; i++) {
+    if (code === bindings[i]) {
+      setInput(i, state);
+    }
   }
 }
 
-function onPointerEvent(button: number, state: number) {
-  switch (button) {
-    case 0:
-      setInput(Input.LMB, state);
-      break;
-    case 2:
-      setInput(Input.RMB, state);
-      break;
+function onPointerEvent(button: number, state: boolean) {
+  for (let i = 0; i < bindings.length; i++) {
+    if (button === bindings[i]) {
+      setInput(i, state);
+    }
   }
 }
 
-window.addEventListener("keydown", ({ code }) => {
-  onKeyEvent(code, 1);
+window.addEventListener("keydown", ({ code, repeat }) => {
+  if (repeat) return;
+  onKeyEvent(code, true);
 });
 
 window.addEventListener("keyup", ({ code }) => {
-  onKeyEvent(code, 0);
+  onKeyEvent(code, false);
 });
 
 canvas.addEventListener("pointerdown", ({ clientX, clientY, button }) => {
   updatePointerPosition(clientX, clientY);
-  onPointerEvent(button, 1);
+  onPointerEvent(button, true);
 });
 
 canvas.addEventListener("pointerup", ({ clientX, clientY, button }) => {
   updatePointerPosition(clientX, clientY);
-  onPointerEvent(button, 0);
+  onPointerEvent(button, false);
 });
 
 canvas.addEventListener("pointermove", ({ clientX, clientY }) => {

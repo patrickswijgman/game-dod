@@ -15,6 +15,7 @@ export const enum Flag {
 
 export const enum State {
   NONE,
+  PLAYER,
 }
 
 export const enum Anim {
