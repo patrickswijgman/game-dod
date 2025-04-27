@@ -1,4 +1,4 @@
-import { TARGET_FRAME_TIME } from "@/consts.ts";
+const targetFrameTime = 1000 / 60;
 
 let last = 0;
 let now = 0;
@@ -18,7 +18,7 @@ export function start(update: () => void) {
     now = performance.now();
 
     time = now - last;
-    delta = time / TARGET_FRAME_TIME;
+    delta = time / targetFrameTime;
     elapsed += time;
 
     frames++;

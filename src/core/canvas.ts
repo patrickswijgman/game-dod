@@ -1,12 +1,16 @@
-import { Color, HEIGHT, SCALE, WIDTH } from "@/consts.ts";
+import { Color } from "@/consts.ts";
 import { getFont } from "@/core/font.ts";
 import { getTexture } from "@/core/texture.ts";
 
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d")!;
+const aspect = window.screen.width / window.screen.height;
+const width = 320;
+const height = width / aspect;
+const scale = window.screen.height / height;
 
 export function resetTransform() {
-  ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0);
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
 }
 
 export function translateTransform(x: number, y: number) {
@@ -18,7 +22,7 @@ export function scaleTransform(x: number, y = x) {
 }
 
 export function clearBackground() {
-  drawRect(0, 0, WIDTH, HEIGHT, Color.BG, true);
+  drawRect(0, 0, width, height, Color.BG, true);
 }
 
 export function drawSprite(x: number, y: number, w: number, h: number, px: number, py: number) {
@@ -44,11 +48,15 @@ export function drawRect(x: number, y: number, w: number, h: number, color: stri
 }
 
 export function getWidth() {
-  return canvas.width / SCALE;
+  return canvas.width / scale;
 }
 
 export function getHeight() {
-  return canvas.height / SCALE;
+  return canvas.height / scale;
+}
+
+export function getScale() {
+  return scale;
 }
 
 export function getCanvas(): Readonly<HTMLCanvasElement> {

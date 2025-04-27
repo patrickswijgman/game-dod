@@ -1,6 +1,6 @@
-import { Input, MAX_INPUTS, SCALE } from "@/consts.ts";
+import { Input, MAX_INPUTS } from "@/consts.ts";
 import { getCameraX, getCameraY } from "@/core/camera.ts";
-import { getCanvas } from "@/core/canvas.ts";
+import { getCanvas, getScale } from "@/core/canvas.ts";
 
 type Binding = string | number;
 
@@ -61,8 +61,8 @@ export function getPointerWorldY() {
 }
 
 function updatePointerPosition(x: number, y: number) {
-  pointerX = x / SCALE;
-  pointerY = y / SCALE;
+  pointerX = x / getScale();
+  pointerY = y / getScale();
   updatePointerWorldPosition();
 }
 

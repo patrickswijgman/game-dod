@@ -8,9 +8,9 @@ export const enum Type {
 }
 
 export const enum Flag {
-  IS_ACTIVE = 1 << 0,
-  IS_PLAYER = 1 << 1,
-  IS_FLIPPED = 1 << 2,
+  ACTIVE = 1 << 0,
+  PLAYER = 1 << 1,
+  FLIPPED = 1 << 2,
 }
 
 export const enum State {
@@ -25,48 +25,38 @@ export const enum Anim {
 }
 
 export const type = new Uint8Array(MAX_ENTITIES);
-
 export const posX = new Float32Array(MAX_ENTITIES);
 export const posY = new Float32Array(MAX_ENTITIES);
 export const velX = new Float32Array(MAX_ENTITIES);
 export const velY = new Float32Array(MAX_ENTITIES);
-
 export const state = new Uint8Array(MAX_ENTITIES);
 export const stateNext = new Uint8Array(MAX_ENTITIES);
 export const stateTime = new Uint32Array(MAX_ENTITIES);
-
 export const anim = new Uint8Array(MAX_ENTITIES);
 export const animX = new Float32Array(MAX_ENTITIES);
 export const animY = new Float32Array(MAX_ENTITIES);
 export const animScaleX = new Float32Array(MAX_ENTITIES);
 export const animScaleY = new Float32Array(MAX_ENTITIES);
 export const animTime = new Uint32Array(MAX_ENTITIES);
-
 export const flags = new Uint32Array(MAX_ENTITIES);
 
 export function newEntity(t: Type, x: number, y: number) {
   const i = nextEntity();
-
   type[i] = t;
-
   posX[i] = x;
   posY[i] = y;
   velX[i] = 0;
   velY[i] = 0;
-
   state[i] = State.NONE;
   stateNext[i] = State.NONE;
   stateTime[i] = 0;
-
   anim[i] = Anim.NONE;
   animX[i] = 0;
   animY[i] = 0;
   animScaleX[i] = 1;
   animScaleY[i] = 1;
   animTime[i] = 0;
-
-  flags[i] = Flag.IS_ACTIVE;
-
+  flags[i] = Flag.ACTIVE;
   return i;
 }
 
@@ -101,7 +91,7 @@ export function setEntityTransform(i: number, inWorld: boolean) {
     translateTransform(animX[i], animY[i]);
     scaleTransform(animScaleX[i], animScaleY[i]);
   }
-  if (isFlag(i, Flag.IS_FLIPPED)) {
+  if (isFlag(i, Flag.FLIPPED)) {
     scaleTransform(-1, 1);
   }
 }
@@ -120,7 +110,7 @@ export function isFlag(i: number, flag: Flag) {
 
 function nextEntity() {
   for (let i = 0; i < MAX_ENTITIES; i++) {
-    if (!isFlag(i, Flag.IS_ACTIVE)) {
+    if (!isFlag(i, Flag.ACTIVE)) {
       return i;
     }
   }

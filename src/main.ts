@@ -1,16 +1,16 @@
 import { updateBreathAnimation } from "@/anims/breath.ts";
 import { updateWalkAnimation } from "@/anims/walk.ts";
 import { Color, Input } from "@/consts.ts";
-import { setCameraPosition, updateCamera } from "@/core/camera.ts";
+import { setCameraPosition, setCameraSmoothing, updateCamera } from "@/core/camera.ts";
 import { clearBackground, drawText, resetTransform, scaleTransform, translateTransform } from "@/core/canvas.ts";
 import { loadFont } from "@/core/font.ts";
 import { setBinding, updateInputs } from "@/core/input.ts";
 import { getDelta, getFramesPerSecond, start } from "@/core/loop.ts";
 import { loadTexture } from "@/core/texture.ts";
 import { addVector } from "@/core/vector.ts";
-import { newPlayer } from "@/entities/player.ts";
-import { Anim, anim, posX, posY, State, state, stateNext, transitionState, Type, type, velX, velY } from "@/lib/entity.ts";
-import { getEntities, sortEntities } from "@/lib/game.ts";
+import { newPlayer, renderPlayer } from "@/entities/player.ts";
+import { Anim, anim, posX, posY, State, state, stateNext, transitionState, Type, type, velX, velY } from "@/data/entity.ts";
+import { getEntities, getPlayer, sortEntities } from "@/data/game.ts";
 import { updatePlayerState } from "@/states/player.ts";
 
 async function setup() {
@@ -30,7 +30,9 @@ async function setup() {
   setBinding(Input.RIGHT, "KeyD");
 
   newPlayer(20, 20);
+
   setCameraPosition(20, 20);
+  setCameraSmoothing(0.1);
 }
 
 function update() {
@@ -40,12 +42,6 @@ function update() {
   sortEntities(sortEntitiesOnDepth);
 
   for (const i of getEntities()) {
-    switch (type[i]) {
-      case Type.PLAYER:
-        updateCamera(posX[i], posY[i]);
-        break;
-    }
-
     if (stateNext[i] !== state[i]) {
       transitionState(i);
     }
@@ -66,7 +62,16 @@ function update() {
     }
 
     addVector(i, posX, posY, i, velX, velY, getDelta());
+
+    switch (type[i]) {
+      case Type.PLAYER:
+        renderPlayer(i);
+        break;
+    }
   }
+
+  const i = getPlayer();
+  updateCamera(posX[i], posY[i]);
 
   resetTransform();
   translateTransform(2, 2);
