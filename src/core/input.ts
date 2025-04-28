@@ -16,6 +16,12 @@ let pointerWorldY = 0;
 
 const canvas = getCanvas();
 
+export function updateInputs() {
+  updatePointerWorldPosition();
+  inputsPressed.fill(0);
+  inputsReleased.fill(0);
+}
+
 export function setInput(i: Input, state: boolean) {
   inputsDown[i] = state ? 1 : 0;
   inputsPressed[i] = state ? 1 : 0;
@@ -24,12 +30,6 @@ export function setInput(i: Input, state: boolean) {
 
 export function setBinding(i: Input, b: string) {
   bindings[i] = b;
-}
-
-export function updateInputs() {
-  updatePointerWorldPosition();
-  inputsPressed.fill(0);
-  inputsReleased.fill(0);
 }
 
 export function isInputDown(i: Input) {
