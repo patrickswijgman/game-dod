@@ -27,8 +27,6 @@ export const enum Anim {
 export const type = new Uint8Array(MAX_ENTITIES);
 export const posX = new Float32Array(MAX_ENTITIES);
 export const posY = new Float32Array(MAX_ENTITIES);
-export const velX = new Float32Array(MAX_ENTITIES);
-export const velY = new Float32Array(MAX_ENTITIES);
 export const state = new Uint8Array(MAX_ENTITIES);
 export const stateNext = new Uint8Array(MAX_ENTITIES);
 export const stateTime = new Uint32Array(MAX_ENTITIES);
@@ -45,8 +43,6 @@ export function newEntity(t: Type, x: number, y: number) {
   type[i] = t;
   posX[i] = x;
   posY[i] = y;
-  velX[i] = 0;
-  velY[i] = 0;
   state[i] = State.NONE;
   stateNext[i] = State.NONE;
   stateTime[i] = 0;

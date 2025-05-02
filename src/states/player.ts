@@ -1,30 +1,34 @@
-import { Flag, setFlag, velX, velY, setAnimation, Anim } from "@/data/entity.ts";
-import { getVectorLength, normalizeVector, resetVector, scaleVector } from "@/core/vector.ts";
+import { Flag, setFlag, setAnimation, Anim, posX, posY } from "@/data/entity.ts";
 import { isInputDown } from "@/core/input.ts";
 import { Input } from "@/consts.ts";
+import { getDelta } from "@/core/loop.ts";
+import { distance } from "@/core/utils.ts";
 
 export function updatePlayerState(i: number) {
-  resetVector(i, velX, velY);
+  let velX = 0;
+  let velY = 0;
 
   if (isInputDown(Input.UP)) {
-    velY[i] -= 1;
+    velY -= 1;
   }
   if (isInputDown(Input.DOWN)) {
-    velY[i] += 1;
+    velY += 1;
   }
   if (isInputDown(Input.LEFT)) {
-    velX[i] -= 1;
+    velX -= 1;
     setFlag(i, Flag.FLIPPED, true);
   }
   if (isInputDown(Input.RIGHT)) {
-    velX[i] += 1;
+    velX += 1;
     setFlag(i, Flag.FLIPPED, false);
   }
 
-  normalizeVector(i, velX, velY);
-  scaleVector(i, velX, velY, 0.75);
-
-  if (getVectorLength(i, velX, velY)) {
+  const v = distance(0, 0, velX, velY);
+  if (v) {
+    velX = (velX / v) * 0.75;
+    velY = (velY / v) * 0.75;
+    posX[i] += velX * getDelta();
+    posY[i] += velY * getDelta();
     setAnimation(i, Anim.WALK);
   } else {
     setAnimation(i, Anim.BREATH);

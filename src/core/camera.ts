@@ -1,6 +1,6 @@
 import { getHeight, getWidth, translateTransform } from "@/core/canvas.ts";
 import { getDelta } from "@/core/loop.ts";
-import { pythagoras } from "@/core/utils.ts";
+import { distance } from "@/core/utils.ts";
 
 let x = 0;
 let y = 0;
@@ -11,10 +11,10 @@ export function updateCamera(targetX: number, targetY: number) {
   const ty = targetY - getHeight() / 2;
   const dx = tx - x;
   const dy = ty - y;
-  const d = pythagoras(dx, dy);
+  const d = distance(0, 0, dx, dy);
   const vx = dx * smoothing * getDelta();
   const vy = dy * smoothing * getDelta();
-  const v = pythagoras(vx, vy);
+  const v = distance(0, 0, vx, vy);
   if (v > d) {
     x += (vx / v) * d;
     y += (vy / v) * d;

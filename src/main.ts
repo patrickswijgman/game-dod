@@ -5,11 +5,10 @@ import { setCameraPosition, setCameraSmoothing, updateCamera } from "@/core/came
 import { clearBackground, drawText, resetTransform, scaleTransform, translateTransform } from "@/core/canvas.ts";
 import { loadFont } from "@/core/font.ts";
 import { setBinding, updateInputs } from "@/core/input.ts";
-import { getDelta, getFramesPerSecond, start } from "@/core/loop.ts";
+import { getFramesPerSecond, start } from "@/core/loop.ts";
 import { loadTexture } from "@/core/texture.ts";
-import { addVector } from "@/core/vector.ts";
 import { newPlayer, renderPlayer } from "@/entities/player.ts";
-import { Anim, anim, posX, posY, State, state, stateNext, transitionState, Type, type, velX, velY } from "@/data/entity.ts";
+import { Anim, anim, posX, posY, State, state, stateNext, transitionState, Type, type } from "@/data/entity.ts";
 import { getEntities, getPlayer, sortEntities } from "@/data/game.ts";
 import { updatePlayerState } from "@/states/player.ts";
 
@@ -60,8 +59,6 @@ function update() {
         updateWalkAnimation(i);
         break;
     }
-
-    addVector(i, posX, posY, i, velX, velY, getDelta());
 
     switch (type[i]) {
       case Type.PLAYER:
