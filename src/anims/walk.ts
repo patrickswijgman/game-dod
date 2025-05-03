@@ -1,5 +1,5 @@
+import { animTime, animY } from "@/components/animation.ts";
 import { tween } from "@/core/utils.ts";
-import { animTime, animY } from "@/data/entity.ts";
 import { tick } from "@/lib/timer.ts";
 
 export function updateWalkAnimation(i: number) {

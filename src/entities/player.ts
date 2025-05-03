@@ -1,6 +1,9 @@
+import { Type } from "@/components/base.ts";
+import { setEntityTransform } from "@/components/render.ts";
+import { setState, State } from "@/components/state.ts";
 import { drawRect } from "@/core/canvas.ts";
-import { newEntity, setEntityTransform, setState, State, Type } from "@/data/entity.ts";
 import { addEntity, setPlayer } from "@/data/game.ts";
+import { newEntity } from "@/lib/entity.ts";
 
 export function newPlayer(x: number, y: number) {
   const i = newEntity(Type.PLAYER, x, y);

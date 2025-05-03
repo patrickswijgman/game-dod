@@ -1,16 +1,19 @@
-import { updateBreathAnimation } from "@/anims/breath.ts";
-import { updateWalkAnimation } from "@/anims/walk.ts";
+import { Anim, anim } from "@/components/animation.ts";
 import { Color } from "@/consts.ts";
-import { setCameraPosition, setCameraSmoothing, updateCamera } from "@/core/camera.ts";
+import { State, state, stateNext, transitionState } from "@/components/state.ts";
+import { Type, type } from "@/components/base.ts";
 import { clearBackground, drawText, resetTransform, scaleTransform, setAlpha, translateTransform } from "@/core/canvas.ts";
-import { loadFont } from "@/core/font.ts";
-import { updateInputs } from "@/core/input.ts";
+import { getEntities, getPlayer, sortEntities } from "@/data/game.ts";
 import { getFramesPerSecond, start } from "@/core/loop.ts";
+import { loadFont } from "@/core/font.ts";
 import { loadTexture } from "@/core/texture.ts";
 import { newPlayer, renderPlayer } from "@/entities/player.ts";
-import { Anim, anim, posX, posY, State, state, stateNext, transitionState, Type, type } from "@/data/entity.ts";
-import { getEntities, getPlayer, sortEntities } from "@/data/game.ts";
+import { posX, posY } from "@/components/position.ts";
+import { setCameraPosition, setCameraSmoothing, updateCamera } from "@/core/camera.ts";
+import { updateBreathAnimation } from "@/anims/breath.ts";
+import { updateInputs } from "@/core/input.ts";
 import { updatePlayerState } from "@/states/player.ts";
+import { updateWalkAnimation } from "@/anims/walk.ts";
 
 async function setup() {
   await Promise.all([

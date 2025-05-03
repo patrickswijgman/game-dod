@@ -1,6 +1,6 @@
+import { posX, posY } from "@/components/position.ts";
 import { getDelta } from "@/core/loop.ts";
 import { distance } from "@/core/utils.ts";
-import { posX, posY } from "@/data/entity.ts";
 
 export function seek(i: number, x: number, y: number, speed: number) {
   const dx = x - posX[i];

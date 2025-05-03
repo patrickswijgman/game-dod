@@ -1,5 +1,5 @@
+import { animScaleX, animScaleY, animTime } from "@/components/animation.ts";
 import { tween } from "@/core/utils.ts";
-import { animScaleX, animScaleY, animTime } from "@/data/entity.ts";
 import { tick } from "@/lib/timer.ts";
 
 export function updateBreathAnimation(i: number) {

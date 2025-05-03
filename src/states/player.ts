@@ -1,7 +1,9 @@
-import { Flag, setFlag, setAnimation, Anim, posX, posY } from "@/data/entity.ts";
 import { isInputDown } from "@/core/input.ts";
 import { Input } from "@/consts.ts";
 import { seek } from "@/lib/steering.ts";
+import { posX, posY } from "@/components/position.ts";
+import { isFlipped } from "@/components/render.ts";
+import { Anim, setAnimation } from "@/components/animation.ts";
 
 export function updatePlayerState(i: number) {
   let x = posX[i];
@@ -15,11 +17,11 @@ export function updatePlayerState(i: number) {
   }
   if (isInputDown(Input.LEFT)) {
     x -= 1;
-    setFlag(i, Flag.FLIPPED, true);
+    isFlipped[i] = 1;
   }
   if (isInputDown(Input.RIGHT)) {
     x += 1;
-    setFlag(i, Flag.FLIPPED, false);
+    isFlipped[i] = 0;
   }
 
   if (seek(i, x, y, 0.75)) {
