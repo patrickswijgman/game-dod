@@ -1,5 +1,5 @@
-export function tween(duration: number, elapsed: number): number {
-  return 0.5 * (1 - Math.cos((Math.PI * (elapsed % (2 * duration))) / duration));
+export function tween(x: number) {
+  return -(Math.cos(Math.PI * x) - 1) / 2;
 }
 
 export function distance(x1: number, y1: number, x2: number, y2: number) {
@@ -10,8 +10,5 @@ export function distance(x1: number, y1: number, x2: number, y2: number) {
 
 export function basename(s: string, removeExtension = false) {
   const name = s.substring(s.lastIndexOf("/") + 1);
-  if (removeExtension) {
-    return name.substring(0, name.lastIndexOf("."));
-  }
-  return name;
+  return removeExtension ? name.substring(0, name.lastIndexOf(".")) : name;
 }

@@ -1,11 +1,10 @@
-export const MAX_ENTITIES = 2048;
-export const MAX_INPUTS = 8;
+export const MAX_ENTITIES = 4096;
 
 export const enum Input {
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
+  UP = "KeyW",
+  DOWN = "KeyS",
+  LEFT = "KeyA",
+  RIGHT = "KeyD",
 }
 
 export const enum Color {

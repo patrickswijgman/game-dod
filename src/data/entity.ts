@@ -9,8 +9,7 @@ export const enum Type {
 
 export const enum Flag {
   ACTIVE = 1 << 0,
-  PLAYER = 1 << 1,
-  FLIPPED = 1 << 2,
+  FLIPPED = 1 << 1,
 }
 
 export const enum State {
@@ -37,6 +36,9 @@ export const animScaleX = new Float32Array(MAX_ENTITIES);
 export const animScaleY = new Float32Array(MAX_ENTITIES);
 export const animTime = new Uint32Array(MAX_ENTITIES);
 export const flags = new Uint32Array(MAX_ENTITIES);
+
+// TODO on entity clear/remove set freeIdx
+// let freeIdx = 0;
 
 export function newEntity(t: Type, x: number, y: number) {
   const i = nextEntity();

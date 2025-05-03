@@ -1,8 +1,8 @@
-import { getTime } from "@/core/loop.ts";
 import { tween } from "@/core/utils.ts";
 import { animTime, animY } from "@/data/entity.ts";
+import { tick } from "@/lib/timer.ts";
 
 export function updateWalkAnimation(i: number) {
-  animTime[i] += getTime();
-  animY[i] = -1 * tween(100, animTime[i]);
+  tick(i, animTime, Infinity);
+  animY[i] = -1 * tween(animTime[i] / 100);
 }

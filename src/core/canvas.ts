@@ -4,6 +4,7 @@ import { getTexture } from "@/core/texture.ts";
 
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d")!;
+
 const aspect = window.screen.width / window.screen.height;
 const width = 320;
 const height = width / aspect;
@@ -45,6 +46,10 @@ export function drawRect(x: number, y: number, w: number, h: number, color: stri
     ctx.strokeStyle = color;
     ctx.strokeRect(x, y, w, h);
   }
+}
+
+export function setAlpha(a: number) {
+  ctx.globalAlpha = a;
 }
 
 export function getWidth() {
