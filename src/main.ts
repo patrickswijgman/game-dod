@@ -1,24 +1,24 @@
 import { Anim, anim } from "@/components/animation.ts";
-import { Color } from "@/consts.ts";
 import { State, state, stateNext, transitionState } from "@/components/state.ts";
-import { Type, type } from "@/components/base.ts";
+import { isActive, Type, type } from "@/components/base.ts";
 import { clearBackground, drawText, resetTransform, scaleTransform, setAlpha, translateTransform } from "@/core/canvas.ts";
-import { getEntities, getPlayer, sortEntities } from "@/data/game.ts";
-import { getFramesPerSecond, start } from "@/core/loop.ts";
+import { cleanupDestroyedEntities, entities, playerIdx } from "@/data/game.ts";
+import { fps, start } from "@/core/loop.ts";
 import { loadFont } from "@/core/font.ts";
-import { loadTexture } from "@/core/texture.ts";
+import { loadTexture } from "@/core/textures.ts";
 import { newPlayer, renderPlayer } from "@/entities/player.ts";
 import { posX, posY } from "@/components/position.ts";
-import { setCameraPosition, setCameraSmoothing, updateCamera } from "@/core/camera.ts";
+import { setCameraPosition, updateCamera } from "@/core/camera.ts";
 import { updateBreathAnimation } from "@/anims/breath.ts";
 import { updateInputs } from "@/core/input.ts";
 import { updatePlayerState } from "@/states/player.ts";
 import { updateWalkAnimation } from "@/anims/walk.ts";
+import { Texture } from "@/consts.ts";
 
 async function setup() {
   await Promise.all([
     // Textures
-    loadTexture("textures/atlas.png"),
+    loadTexture(Texture.ATLAS, "textures/atlas.png"),
 
     // Fonts
     loadFont("fonts/pixelmix.ttf"),
@@ -29,16 +29,20 @@ async function setup() {
   newPlayer(20, 20);
 
   setCameraPosition(20, 20);
-  setCameraSmoothing(0.1);
 }
 
 function update() {
   resetTransform();
   clearBackground();
   updateInputs();
-  sortEntities(sortEntitiesOnDepth);
 
-  for (const i of getEntities()) {
+  entities.sort(sortEntitiesOnDepth);
+
+  for (const i of entities) {
+    if (!isActive[i]) {
+      continue;
+    }
+
     if (stateNext[i] !== state[i]) {
       transitionState(i);
     }
@@ -65,14 +69,13 @@ function update() {
     }
   }
 
-  const i = getPlayer();
-  updateCamera(posX[i], posY[i]);
+  cleanupDestroyedEntities();
 
   resetTransform();
   translateTransform(1, 1);
   scaleTransform(0.25);
   setAlpha(0.5);
-  drawText(getFramesPerSecond().toString(), 0, 0, Color.TEXT, "left", "top");
+  drawText(fps.toString(), 0, 0);
   setAlpha(1);
 }
 

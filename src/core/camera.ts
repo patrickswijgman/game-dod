@@ -1,46 +1,33 @@
 import { getHeight, getWidth, translateTransform } from "@/core/canvas.ts";
-import { getDelta } from "@/core/loop.ts";
+import { delta } from "@/core/loop.ts";
 import { distance } from "@/core/utils.ts";
 
-let x = 0;
-let y = 0;
-let smoothing = 1;
+export let cameraX = 0;
+export let cameraY = 0;
 
 export function updateCamera(targetX: number, targetY: number) {
   const tx = targetX - getWidth() / 2;
   const ty = targetY - getHeight() / 2;
-  const dx = tx - x;
-  const dy = ty - y;
+  const dx = tx - cameraX;
+  const dy = ty - cameraY;
   const d = distance(0, 0, dx, dy);
-  const vx = dx * smoothing * getDelta();
-  const vy = dy * smoothing * getDelta();
+  const vx = dx * 0.1 * delta;
+  const vy = dy * 0.1 * delta;
   const v = distance(0, 0, vx, vy);
   if (v > d) {
-    x += (vx / v) * d;
-    y += (vy / v) * d;
+    cameraX += (vx / v) * d;
+    cameraY += (vy / v) * d;
   } else {
-    x += vx;
-    y += vy;
+    cameraX += vx;
+    cameraY += vy;
   }
 }
 
 export function addCameraTransform() {
-  translateTransform(-x, -y);
+  translateTransform(-cameraX, -cameraY);
 }
 
 export function setCameraPosition(targetX: number, targetY: number) {
-  x = targetX - getWidth() / 2;
-  y = targetY - getHeight() / 2;
-}
-
-export function setCameraSmoothing(s: number) {
-  smoothing = s;
-}
-
-export function getCameraX() {
-  return x;
-}
-
-export function getCameraY() {
-  return y;
+  cameraX = targetX - getWidth() / 2;
+  cameraY = targetY - getHeight() / 2;
 }

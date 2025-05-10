@@ -1,4 +1,5 @@
 import { MAX_ENTITIES } from "@/consts.ts";
+import { scaleTransform, translateTransform } from "@/core/canvas.ts";
 
 export const enum Anim {
   NONE,
@@ -21,5 +22,12 @@ export function setAnimation(i: number, a: Anim) {
     animScaleX[i] = 1;
     animScaleY[i] = 1;
     animTime[i] = 0;
+  }
+}
+
+export function addAnimationTransform(i: number) {
+  if (anim[i]) {
+    translateTransform(animX[i], animY[i]);
+    scaleTransform(animScaleX[i], animScaleY[i]);
   }
 }

@@ -1,17 +1,15 @@
 import { Input } from "@/consts.ts";
-import { getCameraX, getCameraY } from "@/core/camera.ts";
-import { getCanvas, getScale } from "@/core/canvas.ts";
+import { cameraX, cameraY } from "@/core/camera.ts";
+import { canvas, scale } from "@/core/canvas.ts";
 
 const inputsDown = new Map<string, boolean>();
 const inputsPressed = new Map<string, boolean>();
 const inputsReleased = new Map<string, boolean>();
 
-let pointerX = 0;
-let pointerY = 0;
-let pointerWorldX = 0;
-let pointerWorldY = 0;
-
-const canvas = getCanvas();
+export let pointerX = 0;
+export let pointerY = 0;
+export let pointerWorldX = 0;
+export let pointerWorldY = 0;
 
 export function updateInputs() {
   updatePointerWorldPosition();
@@ -37,31 +35,15 @@ export function isInputReleased(i: Input) {
   return inputsReleased.get(i);
 }
 
-export function getPointerX() {
-  return pointerX;
-}
-
-export function getPointerY() {
-  return pointerY;
-}
-
-export function getPointerWorldX() {
-  return pointerWorldX;
-}
-
-export function getPointerWorldY() {
-  return pointerWorldY;
-}
-
 function updatePointerPosition(x: number, y: number) {
-  pointerX = x / getScale();
-  pointerY = y / getScale();
+  pointerX = x / scale;
+  pointerY = y / scale;
   updatePointerWorldPosition();
 }
 
 function updatePointerWorldPosition() {
-  pointerWorldX = pointerX + getCameraX();
-  pointerWorldY = pointerY + getCameraY();
+  pointerWorldX = pointerX + cameraX;
+  pointerWorldY = pointerY + cameraY;
 }
 
 window.addEventListener("keydown", ({ code, repeat }) => {

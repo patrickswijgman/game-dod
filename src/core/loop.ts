@@ -2,12 +2,13 @@ const targetFrameTime = 1000 / 60;
 
 let last = 0;
 let now = 0;
-let delta = 0;
-let time = 0;
-let elapsed = 0;
 let frames = 0;
 let framesTime = 0;
-let fps = 0;
+
+export let delta = 0;
+export let time = 0;
+export let elapsed = 0;
+export let fps = 0;
 
 export function start(update: () => void) {
   last = performance.now();
@@ -34,16 +35,4 @@ export function start(update: () => void) {
   };
 
   requestAnimationFrame(tick);
-}
-
-export function getDelta() {
-  return delta;
-}
-
-export function getTime() {
-  return time;
-}
-
-export function getFramesPerSecond() {
-  return fps;
 }

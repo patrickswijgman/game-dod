@@ -8,6 +8,13 @@ export function distance(x1: number, y1: number, x2: number, y2: number) {
   return Math.sqrt(x * x + y * y);
 }
 
+export function remove<T>(a: Array<T>, e: T) {
+  const i = a.indexOf(e);
+  if (i !== -1) {
+    a.splice(i, 1);
+  }
+}
+
 export function basename(s: string, removeExtension = false) {
   const name = s.substring(s.lastIndexOf("/") + 1);
   return removeExtension ? name.substring(0, name.lastIndexOf(".")) : name;

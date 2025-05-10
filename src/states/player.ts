@@ -4,6 +4,7 @@ import { seek } from "@/lib/steering.ts";
 import { posX, posY } from "@/components/position.ts";
 import { isFlipped } from "@/components/render.ts";
 import { Anim, setAnimation } from "@/components/animation.ts";
+import { updateCamera } from "@/core/camera.ts";
 
 export function updatePlayerState(i: number) {
   let x = posX[i];
@@ -29,4 +30,6 @@ export function updatePlayerState(i: number) {
   } else {
     setAnimation(i, Anim.BREATH);
   }
+
+  updateCamera(x, y);
 }

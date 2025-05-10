@@ -1,14 +1,14 @@
-import { Color } from "@/consts.ts";
-import { getFont } from "@/core/font.ts";
-import { getTexture } from "@/core/texture.ts";
-
-const canvas = document.createElement("canvas");
-const ctx = canvas.getContext("2d")!;
+import { Color, Texture, WIDTH } from "@/consts.ts";
+import { font } from "@/core/font.ts";
+import { textures } from "@/core/textures.ts";
 
 const aspect = window.screen.width / window.screen.height;
-const width = 320;
+const width = WIDTH;
 const height = width / aspect;
-const scale = window.screen.height / height;
+
+export const canvas = document.createElement("canvas");
+export const ctx = canvas.getContext("2d")!;
+export const scale = window.screen.height / height;
 
 export function resetTransform() {
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
@@ -26,12 +26,12 @@ export function clearBackground() {
   drawRect(0, 0, width, height, Color.BG, true);
 }
 
-export function drawSprite(x: number, y: number, w: number, h: number, px: number, py: number) {
-  ctx.drawImage(getTexture(), x, y, w, h, -px, -py, w, h);
+export function drawSprite(t: Texture, x: number, y: number, w: number, h: number, px: number, py: number) {
+  ctx.drawImage(textures[t], x, y, w, h, -px, -py, w, h);
 }
 
-export function drawText(s: string, x: number, y: number, color: string, align: CanvasTextAlign, baseline: CanvasTextBaseline) {
-  ctx.font = getFont();
+export function drawText(s: string, x: number, y: number, color = Color.TEXT, align: CanvasTextAlign = "left", baseline: CanvasTextBaseline = "top") {
+  ctx.font = font;
   ctx.textAlign = align;
   ctx.textBaseline = baseline;
   ctx.fillStyle = color;
@@ -58,14 +58,6 @@ export function getWidth() {
 
 export function getHeight() {
   return canvas.height / scale;
-}
-
-export function getScale() {
-  return scale;
-}
-
-export function getCanvas(): Readonly<HTMLCanvasElement> {
-  return canvas;
 }
 
 function resize() {

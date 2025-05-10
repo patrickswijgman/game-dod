@@ -1,5 +1,5 @@
 import { posX, posY } from "@/components/position.ts";
-import { getDelta } from "@/core/loop.ts";
+import { delta } from "@/core/loop.ts";
 import { distance } from "@/core/utils.ts";
 
 export function seek(i: number, x: number, y: number, speed: number) {
@@ -13,8 +13,8 @@ export function seek(i: number, x: number, y: number, speed: number) {
     const v = distance(0, 0, vx, vy);
 
     if (v) {
-      posX[i] += vx * getDelta();
-      posY[i] += vy * getDelta();
+      posX[i] += vx * delta;
+      posY[i] += vy * delta;
       return v;
     }
   }

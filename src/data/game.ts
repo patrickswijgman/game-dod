@@ -1,23 +1,24 @@
-const entities: Array<number> = [];
+import { remove } from "@/core/utils.ts";
 
-let playerIdx = 0;
+export const entities: Array<number> = [];
+export const destroyed: Array<number> = [];
 
 export function addEntity(i: number) {
   entities.push(i);
 }
 
-export function getEntities(): Readonly<Array<number>> {
-  return entities;
+export function destroyEntity(i: number) {
+  destroyed.push(i);
 }
 
-export function sortEntities(sort: (a: number, b: number) => number) {
-  entities.sort(sort);
-}
+export function cleanupDestroyedEntities() {
+  if (!destroyed.length) {
+    return;
+  }
 
-export function setPlayer(i: number) {
-  playerIdx = i;
-}
+  for (const i of destroyed) {
+    remove(entities, i);
+  }
 
-export function getPlayer() {
-  return playerIdx;
+  destroyed.length = 0;
 }
